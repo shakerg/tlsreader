@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TLS Reader Results</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            font-family: Arial, sans-serif;
+        }
+        #results {
+            margin-top: 20px;
+            text-align: center;
+        }
+        .preferred {
+            font-weight: bold;
+            color: green;
+        }
+        .fail {
+            color: red;
+        }
+        .pass {
+            color: green;
+        }
+    </style>
+</head>
+<body>
+    <h1>TLS Reader Results</h1>
+    <div>
+        <input type="text" id="hostname" placeholder="Enter hostname" />
+        <button onclick="runTest()">Run</button>
+    </div>
+    <div id="results"></div>
+
+    <script>
+        async function runTest() {
+            const hostname = document.getElementById('hostname').value;
+            if (!hostname) {
+                alert('Please enter a hostname');
+                return;
+            }
+
+            const response = await fetch(`/results?hostname=${hostname}`);
+            const data = await response.json();
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = '';
+
+            const tlsVersionElement = document.createElement('div');
+            tlsVersionElement.textContent = `TLS Version: ${data.tlsVersion}`;
+            tlsVersionElement.classList.add('preferred');
+            resultsDiv.appendChild(tlsVersionElement);
+
+            const preferredCipherElement = document.createElement('div');
+            preferredCipherElement.textContent = `Preferred Cipher: ${data.preferredCipher.name}`;
+            preferredCipherElement.classList.add('preferred');
+            resultsDiv.appendChild(preferredCipherElement);
+
+            data.results.forEach(result => {
+                const resultElement = document.createElement('div');
+                resultElement.textContent = `${result.cipher}: ${result.status}`;
+                resultElement.classList.add(result.status.toLowerCase());
+                resultsDiv.appendChild(resultElement);
+            });
+        }
+    </script>
+</body>
+</html>
