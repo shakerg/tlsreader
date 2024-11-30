@@ -1,5 +1,5 @@
 const tls = require('tls');
-const { exec } = require('child_process');
+const { execFile } = require('child_process');
 
 function getTlsResults(hostname) {
     return new Promise((resolve, reject) => {
@@ -78,9 +78,9 @@ function getTlsResults(hostname) {
 
                     ciphers.forEach(cipher => {
                         const tlsVersionFlag = cipher.startsWith('TLS_') ? '-tls1_3' : '-tls1_2';
-                        const command = `openssl s_client -connect ${hostname}:${port} -cipher '${cipher}' ${tlsVersionFlag} < /dev/null`;
+                        const args = ['s_client', '-connect', `${hostname}:${port}`, '-cipher', cipher, tlsVersionFlag, '<', '/dev/null'];
 
-                        exec(command, (error, stdout, stderr) => {
+                        execFile('openssl', args, (error, stdout, stderr) => {
                             // Parse the stdout to check if the cipher was successful
                             const cipherRegex = /Cipher\s*:\s*(.*)/;
                             const match = stdout.match(cipherRegex);
