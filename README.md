@@ -54,6 +54,7 @@ Features:
 `curl http://localhost:3000/results?hostname=www.example.com`
 
 ## Response
+```
 {
   "tlsVersion": "TLSv1.2",
   "preferredCipher": {
@@ -83,6 +84,7 @@ Features:
     // Additional cipher results...
   ]
 }
+```
 
 ## Files
 - server.js: Sets up the Express server, serves static files, and handles the /results endpoint.
