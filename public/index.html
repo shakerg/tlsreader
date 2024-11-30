@@ -60,7 +60,19 @@
             preferredCipherElement.classList.add('preferred');
             resultsDiv.appendChild(preferredCipherElement);
 
-            data.results.forEach(result => {
+            // Display TLS 1.0 availability
+            const tls10Element = document.createElement('div');
+            tls10Element.textContent = `TLS 1.0 Available: ${data.tls10Available ? 'Yes' : 'No'}`;
+            tls10Element.classList.add(data.tls10Available ? 'fail' : 'pass');
+            resultsDiv.appendChild(tls10Element);
+
+            // Display TLS 1.1 availability
+            const tls11Element = document.createElement('div');
+            tls11Element.textContent = `TLS 1.1 Available: ${data.tls11Available ? 'Yes' : 'No'}`;
+            tls11Element.classList.add(data.tls11Available ? 'fail' : 'pass');
+            resultsDiv.appendChild(tls11Element);
+
+            data.ciphers.forEach(result => {
                 const resultElement = document.createElement('div');
                 resultElement.textContent = `${result.cipher}: ${result.status}`;
                 resultElement.classList.add(result.status.toLowerCase());
