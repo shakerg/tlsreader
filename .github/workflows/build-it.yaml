@@ -35,3 +35,11 @@ jobs:
 
       - name: Push the Docker image
         run: docker push ghcr.io/${{ steps.vars.outputs.REPO_OWNER }}/${{ steps.vars.outputs.REPO_NAME }}:latest
+
+      - name: Make Docker image public
+        run: |
+          curl -X PATCH \
+            -H "Authorization: Bearer ${{ secrets.GHCR_TOKEN }}" \
+            -H "Accept: application/vnd.github.v3+json" \
+            https://api.github.com/user/packages/container/${{ steps.vars.outputs.REPO_NAME }}/visibility \
+            -d '{"visibility":"public"}'
