@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TLS Reader Results</title>
+    <title>TLS Inspection Results</title>
     <style>
         body {
             display: flex;
@@ -27,7 +27,6 @@
         .pass {
             color: green;
         }
-        /* Spinner Styles */
         .spinner {
             display: none;
             width: 40px;
@@ -45,7 +44,7 @@
     </style>
 </head>
 <body>
-    <h1>TLS Reader Results</h1>
+    <h1>TLS Inspection Results</h1>
     <div>
         <input type="text" id="hostname" placeholder="Enter hostname" />
         <button id="runButton">Run</button>
@@ -57,7 +56,10 @@
         document.getElementById('runButton').addEventListener('click', runTest);
 
         async function runTest() {
-            const hostname = document.getElementById('hostname').value.trim();
+            const hostnameInput = document.getElementById('hostname');
+            const hostname = hostnameInput.value.trim();
+            hostnameInput.value = hostname;
+
             const spinner = document.getElementById('spinner');
             const resultsDiv = document.getElementById('results');
 
@@ -66,12 +68,10 @@
                 return;
             }
 
-            // Show spinner
             spinner.style.display = 'block';
             resultsDiv.innerHTML = '';
 
             try {
-                // Simulate delay
                 await new Promise(resolve => setTimeout(resolve, 3000));
 
                 const response = await fetch(`/results?hostname=${encodeURIComponent(hostname)}`);
@@ -116,7 +116,6 @@
             } catch (error) {
                 resultsDiv.textContent = `Error: ${error.message}`;
             } finally {
-                // Hide spinner
                 spinner.style.display = 'none';
             }
         }
