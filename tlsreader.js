@@ -1,5 +1,5 @@
 const tls = require('tls');
-const { execFile } = require('child_process');
+const { exec } = require('child_process');
 
 function getTlsResults(hostname) {
     return new Promise((resolve, reject) => {
@@ -78,17 +78,21 @@ function getTlsResults(hostname) {
 
                     ciphers.forEach(cipher => {
                         const tlsVersionFlag = cipher.startsWith('TLS_') ? '-tls1_3' : '-tls1_2';
-                        const args = ['s_client', '-connect', `${hostname}:${port}`, '-cipher', cipher, tlsVersionFlag, '<', '/dev/null'];
+                        const command = `openssl s_client -connect ${hostname}:${port} -cipher ${cipher} ${tlsVersionFlag} < /dev/null`;
 
-                        execFile('openssl', args, (error, stdout, stderr) => {
-                            // Parse the stdout to check if the cipher was successful
-                            const cipherRegex = /Cipher\s*:\s*(.*)/;
-                            const match = stdout.match(cipherRegex);
-
-                            if (match && match[1].trim() === cipher) {
-                                results.ciphers.push({ cipher, status: 'Pass' });
+                        exec(command, (error, stdout, stderr) => {
+                            if (error) {
+                                results.ciphers.push({ cipher, status: 'Fail', error: error.message });
                             } else {
-                                results.ciphers.push({ cipher, status: 'Fail' });
+                                const output = stdout + stderr;
+                                const cipherRegex = /Cipher\s*:\s*(.*)/;
+                                const match = output.match(cipherRegex);
+
+                                if (match && match[1].trim() === cipher) {
+                                    results.ciphers.push({ cipher, status: 'Pass' });
+                                } else {
+                                    results.ciphers.push({ cipher, status: 'Fail' });
+                                }
                             }
 
                             completed++;
