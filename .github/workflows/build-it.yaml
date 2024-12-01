@@ -21,10 +21,17 @@ jobs:
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
-          password: ${{ secrets.GHCR_TOKEN }} 
+          password: ${{ secrets.GHCR_PAT }}
+
+      - name: Set up variables
+        id: vars
+        run: |
+          echo "REPO_OWNER=${GITHUB_REPOSITORY_OWNER}" >> $GITHUB_OUTPUT
+          REPO_NAME=$(basename "$GITHUB_REPOSITORY")
+          echo "REPO_NAME=${REPO_NAME}" >> $GITHUB_OUTPUT
 
       - name: Build the Docker image
-        run: docker build . --file Dockerfile --tag ghcr.io/${{ github.repository }}:latest
+        run: docker build . --file Dockerfile --tag ghcr.io/${{ steps.vars.outputs.REPO_OWNER }}/${{ steps.vars.outputs.REPO_NAME }}:latest
 
       - name: Push the Docker image
-        run: docker push ghcr.io/${{ github.repository }}:latest
+        run: docker push ghcr.io/${{ steps.vars.outputs.REPO_OWNER }}/${{ steps.vars.outputs.REPO_NAME }}:latest
