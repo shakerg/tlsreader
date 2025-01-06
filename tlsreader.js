@@ -42,6 +42,7 @@ function getTlsResults(hostname) {
                     testSocket.end();
                     callback();
                 });
+
                 testSocket.on('error', () => {
                     callback();
                 });
@@ -82,7 +83,7 @@ function getTlsResults(hostname) {
 
                         exec(command, (error, stdout, stderr) => {
                             if (error) {
-                                results.ciphers.push({ cipher, status: 'Fail', error: error.message });
+                                results.ciphers.push({ cipher, status: 'NA', error: error.message });
                             } else {
                                 const output = stdout + stderr;
                                 const cipherRegex = /Cipher\s*:\s*(.*)/;
@@ -91,7 +92,7 @@ function getTlsResults(hostname) {
                                 if (match && match[1].trim() === cipher) {
                                     results.ciphers.push({ cipher, status: 'Pass' });
                                 } else {
-                                    results.ciphers.push({ cipher, status: 'Fail' });
+                                    results.ciphers.push({ cipher, status: 'NA' });
                                 }
                             }
 
