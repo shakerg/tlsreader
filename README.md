@@ -132,7 +132,7 @@ Example (abridged):
 * Elimination scan limited to standard three TLS 1.3 suites; custom deployments with GREASE or future suites would need list expansion.
 
 ## License
-MIT (adjust if different in repository licensing).
+MIT License.
 
 ## Contributing
 PRs welcome: raise issues for feature requests (e.g., certificate transparency info, HTTP/2 ALPN display, JA3 fingerprinting).
