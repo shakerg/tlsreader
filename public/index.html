@@ -4,18 +4,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TLS Inspection</title>
+    <title>TLS Inspector - Professional Certificate Analysis</title>
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-    <h1>TLS Inspection</h1>
-    <div>
-        <input type="text" id="hostname" placeholder="Enter hostname" />
-        <button id="runButton">Run</button>
+    <div class="container">
+        <h1>TLS Inspector</h1>
+        
+        <div class="input-section">
+            <input type="text" id="hostname" placeholder="Enter hostname (e.g., google.com)" />
+            <button id="runButton">Analyze TLS Configuration</button>
+        </div>
+        
+        <div id="spinner" class="spinner"></div>
+        <div id="results"></div>
     </div>
-    <div id="spinner" class="spinner"></div>
-    <div id="results"></div>
+    
     <script src="script.js"></script>
 </body>
 
